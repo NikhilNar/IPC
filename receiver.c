@@ -2,7 +2,7 @@
 #include <sys/shm.h>
 #include <stdio.h>
 
-main()
+int main()
 {
 
     key_t key = 1235;
@@ -12,4 +12,5 @@ main()
     shm_id = shmget(key, 10 * sizeof(char), IPC_CREAT);
     shm = shmat(shm_id, NULL, NULL);
     sprintf(shm, "%s", message);
+    return 0;
 }
