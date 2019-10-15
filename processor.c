@@ -5,12 +5,12 @@
 int main()
 {
 
-    key_t key = 1235;
+    key_t key = 2345;
     int shm_id;
     void *shm;
     char *message;
     message = malloc(10 * sizeof(char));
-    shm_id = shmget(key, 10 * sizeof(char), NULL);
+    shm_id = shmget(key, 10 * sizeof(char), IPC_CREAT | 0777);
     shm = shmat(shm_id, NULL, NULL);
     if (shm == NULL)
     {

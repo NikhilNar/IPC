@@ -5,11 +5,11 @@
 int main()
 {
 
-    key_t key = 1235;
+    key_t key = 2345;
     int shm_id;
     void *shm;
     char *message = "hello";
-    shm_id = shmget(key, 10 * sizeof(char), IPC_CREAT);
+    shm_id = shmget(key, 10 * sizeof(char), IPC_CREAT | 0777);
     shm = shmat(shm_id, NULL, NULL);
     sprintf(shm, "%s", message);
     return 0;
