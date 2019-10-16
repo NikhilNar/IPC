@@ -11,17 +11,18 @@ main()
     int shmid;
     key_t key;
     char *shm, *s;
+    char line[1024];
 
     /*
      * We'll name our shared memory segment
      * "5678".
      */
-    key = 5678;
+    key = 55678;
 
     /*
      * Create the segment.
      */
-    if ((shmid = shmget(key, SHMSZ, IPC_CREAT | 0666)) < 0)
+    if ((shmid = shmget(key, SHMSZ, IPC_CREAT | 0777)) < 0)
     {
         perror("shmget");
         exit(1);
@@ -40,20 +41,25 @@ main()
      * Now put some things into the memory for the
      * other process to read.
      */
-    s = shm;
+    int i = 0;
+    while (i < 5)
+    {
+        s = shm;
 
-    for (c = 'a'; c <= 'z'; c++)
-        *s++ = c;
-    *s = NULL;
+        *s = gets(line);
+        *s++;
+        *s = NULL;
 
-    /*
+        /*
      * Finally, we wait until the other process 
      * changes the first character of our memory
      * to '*', indicating that it has read what 
      * we put there.
      */
-    while (*shm != '*')
-        sleep(1);
+        while (*shm != '*')
+            sleep(1);
+        i++;
+    }
 
     exit(0);
 }

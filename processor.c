@@ -15,12 +15,12 @@ main()
      * We need to get the segment named
      * "5678", created by the server.
      */
-    key = 5678;
+    key = 55678;
 
     /*
      * Locate the segment.
      */
-    if ((shmid = shmget(key, SHMSZ, 0666)) < 0)
+    if ((shmid = shmget(key, SHMSZ, 0777)) < 0)
     {
         perror("shmget");
         exit(1);
