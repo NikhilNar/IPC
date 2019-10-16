@@ -3,9 +3,7 @@
 #include <sys/shm.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include<ctype.h>
-
-#define SHMSZ 27
+#include <ctype.h>
 
 main()
 {
@@ -13,11 +11,11 @@ main()
     key_t key;
     char *shm, *s, *copy, *copy1;
     FILE *fPtr;
-    /*
-     * We need to get the segment named
-     * "5678", created by the server.
-     */
+
+    // name of the shared memory segment
     key = 75678;
+
+    // create secrets.out file
     fPtr = fopen("secrets.out", "w");
     if (fPtr == NULL)
     {
@@ -26,61 +24,65 @@ main()
         exit(1);
     }
     /*
-     * Locate the segment.
+     * Find the segment.
      */
-    if ((shmid = shmget(key, SHMSZ, 0777)) < 0)
+    if ((shmid = shmget(key, 30, 0777)) < 0)
     {
         perror("shmget");
         exit(1);
     }
 
-    /*
-     * Now we attach the segment to our data space.
-     */
+    // Attach the segment to the data space.
     if ((shm = shmat(shmid, NULL, 0)) == (char *)-1)
     {
         perror("shmat");
         exit(1);
     }
+
+    /*
+     * Continue reading the secret code from the shared memory.
+     * End the program if the word exit occurs in the message.
+     * The file should be closed to persist the data on the file.
+     * The problem is if I close the file inside the while loop then it will override the
+     * previous data. Hence the mechanism of exit keyword is added to close the program and persist 
+     * the secret codes successfully in the file secrets.out
+     */
     while (1)
     {
-        /*
-        * Now read what the server put in the memory.
-        */
+
         if (*shm != '*')
         {
-            char charArray[1]; 
+            char charArray[1];
             int noOfDigits = 0;
             char digitsToChar[10];
             char message[100];
-            int j=0;
-            for (s = shm; *s != NULL; s++){
-                if(isdigit(*s))
+            int j = 0;
+            for (s = shm; *s != NULL; s++)
+            {
+                if (isdigit(*s))
                     noOfDigits++;
-                message[j++]=*s;    
-                //charArray[0] = *s;         
-                //fputs(charArray, fPtr);
+                message[j++] = *s;
             }
-            if(strstr(message, "exit")){
-                break;        
+            message[j] = '\0';
+            printf("Message entered =%s", message);
+
+            if (strstr(message, "exit"))
+            {
+                break;
             }
-            message[j]='\0';
+
+            // write secret code and no of digits in the secrets.out file.
             fputs(message, fPtr);
             charArray[0] = ' ';
             fputs(charArray, fPtr);
             sprintf(digitsToChar, "%d", noOfDigits);
-            printf("Total numer of digits =%s", digitsToChar);
-            printf("\n");
             fputs(digitsToChar, fPtr);
-            sprintf(digitsToChar,"%s", "");
+            sprintf(digitsToChar, "%s", "");
             charArray[0] = '\n';
             fputs(charArray, fPtr);
 
-            /*
-        * Finally, change the first character of the 
-        * segment to '*', indicating we have read 
-        * the segment.
-        */
+            // Send the acknowledgement to the receiver that the message is read
+            // by setting the shared memory to "*"
             *shm = '*';
         }
     }

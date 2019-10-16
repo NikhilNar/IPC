@@ -3,8 +3,6 @@
 #include <sys/shm.h>
 #include <stdio.h>
 
-#define SHMSZ 27
-
 main()
 {
     char c;
@@ -13,24 +11,17 @@ main()
     char *shm, *s;
     char line[1024];
 
-    /*
-     * We'll name our shared memory segment
-     * "5678".
-     */
+    // name of the shared memory segment
     key = 75678;
 
-    /*
-     * Create the segment.
-     */
-    if ((shmid = shmget(key, SHMSZ, IPC_CREAT | 0777)) < 0)
+    // Create the segment with read and write permission
+    if ((shmid = shmget(key, 30, IPC_CREAT | 0777)) < 0)
     {
         perror("shmget");
         exit(1);
     }
 
-    /*
-     * Now we attach the segment to our data space.
-     */
+    // Attach the segment to the data space.
     if ((shm = shmat(shmid, NULL, 0)) == (char *)-1)
     {
         perror("shmat");
@@ -38,36 +29,40 @@ main()
     }
 
     /*
-     * Now put some things into the memory for the
-     * other process to read.
+     * Continue taking input from the user and publish it into the shared memory if the input has the secret code "C00l"
+     * End the program if the word exit occurs in the user.
+     * The details about the importance of exiting the code can be found in processor.c
      */
-    
+
     while (1)
     {
         s = shm;
         printf("Enter message =");
         gets(line);
-        if(strstr(line, "C00l")||strstr(line, "exit")){
+        if (strstr(line, "C00l") || strstr(line, "exit"))
+        {
             char *ptr = &line[0];
-            while(*ptr!='\0'){  
+            // parse the input and store it in the shared memory pointed by s.
+            while (*ptr != '\0')
+            {
                 *s++ = *ptr;
                 ptr++;
             }
             *s = NULL;
-         
-        if(strstr(line, "exit")){
-            break;
-        }   
+
+            if (strstr(line, "exit"))
+            {
+                break;
+            }
 
             /*
-         * Finally, we wait until the other process 
-         * changes the first character of our memory
-         * to '*', indicating that it has read what 
-         * we put there.
-         */
+            * Wait for the processor to read the secret code from the shared memory.
+            * The processor writes back '*' into the shared memory which indicates that the message has 
+            * been read successfully.
+            */
             while (*shm != '*')
                 sleep(1);
-            }
+        }
     }
 
     exit(0);
