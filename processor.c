@@ -35,19 +35,22 @@ main()
         exit(1);
     }
 
-    /*
-     * Now read what the server put in the memory.
-     */
-    for (s = shm; *s != NULL; s++)
-        putchar(*s);
-    putchar('\n');
+    while (1)
+    {
+        /*
+        * Now read what the server put in the memory.
+        */
+        for (s = shm; *s != NULL; s++)
+            putchar(*s);
+        putchar('\n');
 
-    /*
-     * Finally, change the first character of the 
-     * segment to '*', indicating we have read 
-     * the segment.
-     */
-    *shm = '*';
+        /*
+        * Finally, change the first character of the 
+        * segment to '*', indicating we have read 
+        * the segment.
+        */
+        *shm = '*';
+    }
 
     exit(0);
 }
