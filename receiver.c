@@ -2,6 +2,7 @@
 #include <sys/ipc.h>
 #include <sys/shm.h>
 #include <stdio.h>
+#define MEMSIZE 27
 
 main()
 {
@@ -15,7 +16,7 @@ main()
     key = 75678;
 
     // Create the segment with read and write permission
-    if ((shmid = shmget(key, 30, IPC_CREAT | 0777)) < 0)
+    if ((shmid = shmget(key, MEMSIZE, IPC_CREAT | 0777)) < 0)
     {
         perror("shmget");
         exit(1);

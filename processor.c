@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
+#define MEMSIZE 27
 
 main()
 {
@@ -26,7 +27,7 @@ main()
     /*
      * Find the segment.
      */
-    if ((shmid = shmget(key, 30, 0777)) < 0)
+    if ((shmid = shmget(key, MEMSIZE, 0777)) < 0)
     {
         perror("shmget");
         exit(1);
