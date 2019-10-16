@@ -9,14 +9,19 @@ int main()
     int shm_id;
     void *shm;
     char *message;
-    message = malloc(10 * sizeof(char));
-    shm_id = shmget(key, 10 * sizeof(char), IPC_CREAT | 0777);
-    shm = shmat(shm_id, NULL, NULL);
-    if (shm == NULL)
+    int i = 0;
+    while (1)
     {
-        printf("error");
+        message = malloc(10 * sizeof(char));
+        shm_id = shmget(key, 10 * sizeof(char), IPC_CREAT | 0777);
+        shm = shmat(shm_id, NULL, NULL);
+        if (shm == NULL)
+        {
+            printf("error");
+        }
+        sscanf(shm, "%s", message);
+        printf("\n message = %s\n", message);
     }
-    sscanf(shm, "%s", message);
-    printf("\n message = %s\n", message);
+
     return 0;
 }
