@@ -53,7 +53,7 @@ main()
                 fputs(*s, fPtr);
             fputs(' ', fPtr);
             fputs(2, fPtr);
-            fputs('\n');
+            fputs('\n', fPtr);
             /*
         * Finally, change the first character of the 
         * segment to '*', indicating we have read 
@@ -62,6 +62,8 @@ main()
             *shm = '*';
         }
     }
+
+    fclose(fPtr);
 
     exit(0);
 }
