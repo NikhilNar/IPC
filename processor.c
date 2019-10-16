@@ -65,7 +65,7 @@ main()
                 message[j++] = *s;
             }
             message[j] = '\0';
-            printf("Message entered =%s", message);
+            printf("Message entered =%s\n", message);
 
             if (strstr(message, "exit"))
             {
