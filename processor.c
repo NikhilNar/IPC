@@ -20,8 +20,8 @@ int main()
             printf("error");
         }
         sscanf(shm, "%s", message);
-        shm = "";
         printf("\n message = %s\n", message);
+        shm = "";
     }
 
     return 0;
