@@ -9,13 +9,13 @@ main()
 {
     int shmid;
     key_t key;
-    char *shm, *s;
+    char *shm, *s, *copy, *copy1;
 
     /*
      * We need to get the segment named
      * "5678", created by the server.
      */
-    key = 55678;
+    key = 75678;
 
     /*
      * Locate the segment.
@@ -40,16 +40,18 @@ main()
         /*
         * Now read what the server put in the memory.
         */
-        for (s = shm; *s != NULL; s++)
-            putchar(*s);
-        putchar('\n');
-
+        if(*shm != '*'){
+            for (s = shm; *s != NULL; s++)
+                putchar(*s);
+            putchar('\n');
         /*
         * Finally, change the first character of the 
         * segment to '*', indicating we have read 
         * the segment.
         */
         *shm = '*';
+        }
+        
     }
 
     exit(0);

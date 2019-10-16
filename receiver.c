@@ -17,7 +17,7 @@ main()
      * We'll name our shared memory segment
      * "5678".
      */
-    key = 55678;
+    key = 75678;
 
     /*
      * Create the segment.
@@ -45,19 +45,26 @@ main()
     while (i < 5)
     {
         s = shm;
+        printf("Enter message =");
+        gets(line);
+        if(strstr(line, "C00l")){
+            char *ptr = &line[0];
+            while(*ptr!='\0'){  
+                *s++ = *ptr;
+                ptr++;
+            }
+            *s = NULL;
+            
 
-        *s = gets(line);
-        *s++;
-        *s = NULL;
-
-        /*
-     * Finally, we wait until the other process 
-     * changes the first character of our memory
-     * to '*', indicating that it has read what 
-     * we put there.
-     */
-        while (*shm != '*')
-            sleep(1);
+            /*
+         * Finally, we wait until the other process 
+         * changes the first character of our memory
+         * to '*', indicating that it has read what 
+         * we put there.
+         */
+            while (*shm != '*')
+                sleep(1);
+            }
         i++;
     }
 
