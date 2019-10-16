@@ -1,27 +1,59 @@
+#include <sys/types.h>
 #include <sys/ipc.h>
 #include <sys/shm.h>
 #include <stdio.h>
 
-int main()
+#define SHMSZ 27
+
+main()
 {
+    char c;
+    int shmid;
+    key_t key;
+    char *shm, *s;
 
-    key_t key = 78910;
-    int shm_id;
-    void *shm;
-    int i = 0;
-    char message[1024];
-    shm_id = shmget(key, 10 * sizeof(char), IPC_CREAT | 0777);
-    shm = shmat(shm_id, NULL, NULL);
-    while (i < 5)
+    /*
+     * We'll name our shared memory segment
+     * "5678".
+     */
+    key = 5678;
+
+    /*
+     * Create the segment.
+     */
+    if ((shmid = shmget(key, SHMSZ, IPC_CREAT | 0666)) < 0)
     {
-        printf("Enter message =");
-        gets(message);
-        if (strstr(message, "C00L"))
-        {
-            sprintf(shm, "%s", message);
-        }
-
-        i++;
+        perror("shmget");
+        exit(1);
     }
-    return 0;
+
+    /*
+     * Now we attach the segment to our data space.
+     */
+    if ((shm = shmat(shmid, NULL, 0)) == (char *)-1)
+    {
+        perror("shmat");
+        exit(1);
+    }
+
+    /*
+     * Now put some things into the memory for the
+     * other process to read.
+     */
+    s = shm;
+
+    for (c = 'a'; c <= 'z'; c++)
+        *s++ = c;
+    *s = NULL;
+
+    /*
+     * Finally, we wait until the other process 
+     * changes the first character of our memory
+     * to '*', indicating that it has read what 
+     * we put there.
+     */
+    while (*shm != '*')
+        sleep(1);
+
+    exit(0);
 }
