@@ -5,7 +5,7 @@
 int main()
 {
 
-    key_t key = 5678;
+    key_t key = 6789;
     int shm_id;
     void *shm;
     int i = 0;
