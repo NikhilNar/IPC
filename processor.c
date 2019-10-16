@@ -2,6 +2,7 @@
 #include <sys/ipc.h>
 #include <sys/shm.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #define SHMSZ 27
 
@@ -10,13 +11,19 @@ main()
     int shmid;
     key_t key;
     char *shm, *s, *copy, *copy1;
-
+    FILE *fPtr;
     /*
      * We need to get the segment named
      * "5678", created by the server.
      */
     key = 75678;
-
+    fPtr = fopen("secrets.out", "w");
+    if (fPtr == NULL)
+    {
+        /* File not created hence exit */
+        printf("Unable to create file.\n");
+        exit(1);
+    }
     /*
      * Locate the segment.
      */
@@ -40,18 +47,20 @@ main()
         /*
         * Now read what the server put in the memory.
         */
-        if(*shm != '*'){
+        if (*shm != '*')
+        {
             for (s = shm; *s != NULL; s++)
-                putchar(*s);
-            putchar('\n');
-        /*
+                fputs(*s, fPtr);
+            fputs(' ', fPtr);
+            fputs(2, fPtr);
+            fputs('\n');
+            /*
         * Finally, change the first character of the 
         * segment to '*', indicating we have read 
         * the segment.
         */
-        *shm = '*';
+            *shm = '*';
         }
-        
     }
 
     exit(0);
