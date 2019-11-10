@@ -62,9 +62,9 @@ int main(int argc, char const *argv[])
         exit(EXIT_FAILURE);
     }
 
-    signal(SIGINT, sigintHandler)
+    signal(SIGINT, sigintHandler);
 
-        while (1)
+    while (1)
     {
         valread = read(new_socket, buffer, 1024);
         if (strstr(buffer, "exit"))
