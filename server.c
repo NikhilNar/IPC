@@ -5,7 +5,18 @@
 #include <stdlib.h>
 #include <netinet/in.h>
 #include <string.h>
+#include <signal.h>
 #define PORT 8080
+int noOfDigits = 0;
+int noOfLines = 0;
+
+void sigintHandler(int sig_num)
+{
+    printf("Total number of lines =%d", noOfLines);
+    printf("\nTotal number of digits =%d", noOfDigits);
+    exit(0);
+}
+
 int main(int argc, char const *argv[])
 {
     int server_fd, new_socket, valread;
@@ -51,19 +62,18 @@ int main(int argc, char const *argv[])
         exit(EXIT_FAILURE);
     }
 
-    int noOfDigits = 0;
-    int noOfLines = 0;
+    signal(SIGINT, sigintHandler)
 
-    while (1)
+        while (1)
     {
         valread = read(new_socket, buffer, 1024);
-        printf("%s\n", buffer);
         if (strstr(buffer, "exit"))
         {
             printf("Total number of lines =%d", noOfLines);
-            printf("Total number of digits =%d", noOfDigits);
+            printf("\nTotal number of digits =%d", noOfDigits);
             break;
         }
+        printf("%s\n", buffer);
         char *s;
         for (s = buffer; *s != NULL; s++)
         {
