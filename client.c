@@ -41,13 +41,11 @@ int main(int argc, char const *argv[])
         gets(line);
         if (strstr(line, "C00l") || strstr(line, "exit"))
         {
-
+            send(sock, line, strlen(line), 0);
             if (strstr(line, "exit"))
             {
                 break;
             }
-
-            send(sock, line, strlen(line), 0);
             printf("Message sent to server\n");
         }
     }
