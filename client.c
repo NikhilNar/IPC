@@ -1,4 +1,3 @@
-// Client side C/C++ program to demonstrate Socket programming
 #include <stdio.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
@@ -10,9 +9,7 @@ int main(int argc, char const *argv[])
 {
     int sock = 0, valread;
     struct sockaddr_in serv_addr;
-    // char *hello = "Hello from client";
     char line[1024];
-    char buffer[1024] = {0};
     if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
     {
         printf("\n Socket creation error \n");
@@ -39,6 +36,7 @@ int main(int argc, char const *argv[])
     {
         printf("Enter message =");
         gets(line);
+        // if the input is exit then exit the client and server code
         if (strstr(line, "C00l") || strstr(line, "exit"))
         {
             send(sock, line, strlen(line), 0);
@@ -46,7 +44,7 @@ int main(int argc, char const *argv[])
             {
                 break;
             }
-            printf("Message sent to server\n");
+            printf("Message sent to the server\n");
         }
     }
 

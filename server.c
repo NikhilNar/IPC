@@ -1,4 +1,3 @@
-// Server side C/C++ program to demonstrate Socket programming
 #include <unistd.h>
 #include <stdio.h>
 #include <sys/socket.h>
@@ -12,28 +11,29 @@ int noOfLines = 0;
 
 void sigintHandler(int sig_num)
 {
-    printf("Total number of lines =%d", noOfLines);
-    printf("\nTotal number of digits =%d", noOfDigits);
+    printf("Total number of lines = %d", noOfLines);
+    printf("\nTotal number of digits = %d", noOfDigits);
+    printf("\n");
     exit(0);
 }
 
 int main(int argc, char const *argv[])
 {
-    int server_fd, new_socket, valread;
+    int serverFd, newSocket, valread;
     struct sockaddr_in address;
     int opt = 1;
     int addrlen = sizeof(address);
     char buffer[1024] = {0};
 
     // Creating socket file descriptor
-    if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0)
+    if ((serverFd = socket(AF_INET, SOCK_STREAM, 0)) == 0)
     {
         perror("socket failed");
         exit(EXIT_FAILURE);
     }
 
     // Forcefully attaching socket to the port 8080
-    if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT,
+    if (setsockopt(serverFd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT,
                    &opt, sizeof(opt)))
     {
         perror("setsockopt");
@@ -44,37 +44,40 @@ int main(int argc, char const *argv[])
     address.sin_port = htons(PORT);
 
     // Forcefully attaching socket to the port 8080
-    if (bind(server_fd, (struct sockaddr *)&address,
+    if (bind(serverFd, (struct sockaddr *)&address,
              sizeof(address)) < 0)
     {
         perror("bind failed");
         exit(EXIT_FAILURE);
     }
-    if (listen(server_fd, 3) < 0)
+    if (listen(serverFd, 3) < 0)
     {
         perror("listen");
         exit(EXIT_FAILURE);
     }
-    if ((new_socket = accept(server_fd, (struct sockaddr *)&address,
-                             (socklen_t *)&addrlen)) < 0)
+    if ((newSocket = accept(serverFd, (struct sockaddr *)&address,
+                            (socklen_t *)&addrlen)) < 0)
     {
         perror("accept");
         exit(EXIT_FAILURE);
     }
 
+    // check if the user enters ctrl+c
     signal(SIGINT, sigintHandler);
 
     while (1)
     {
-        valread = read(new_socket, buffer, 1024);
+        valread = read(newSocket, buffer, 1024);
         if (strstr(buffer, "exit"))
         {
-            printf("Total number of lines =%d", noOfLines);
-            printf("\nTotal number of digits =%d", noOfDigits);
+            printf("Total number of lines = %d", noOfLines);
+            printf("\nTotal number of digits = %d", noOfDigits);
+            printf("\n");
             break;
         }
         printf("%s\n", buffer);
         char *s;
+        //parse the input and count the digits
         for (s = buffer; *s != NULL; s++)
         {
             if (isdigit(*s))
