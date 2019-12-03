@@ -11,7 +11,7 @@ void
 magic_code_prog_1(char *host)
 {
 	CLIENT *clnt;
-	int  *result_1;
+	void  *result_1;
 	char * magic_code_1_arg;
 
 #ifndef	DEBUG
@@ -21,9 +21,9 @@ magic_code_prog_1(char *host)
 		exit (1);
 	}
 #endif	/* DEBUG */
-
+    magic_code_1_arg = "C00lMessage";
 	result_1 = magic_code_1(&magic_code_1_arg, clnt);
-	if (result_1 == (int *) NULL) {
+	if (result_1 == (void *) NULL) {
 		clnt_perror (clnt, "call failed");
 	}
 #ifndef	DEBUG

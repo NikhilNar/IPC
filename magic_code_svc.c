@@ -33,7 +33,7 @@ magic_code_prog_1(struct svc_req *rqstp, register SVCXPRT *transp)
 
 	case magic_code:
 		_xdr_argument = (xdrproc_t) xdr_wrapstring;
-		_xdr_result = (xdrproc_t) xdr_int;
+		_xdr_result = (xdrproc_t) xdr_void;
 		local = (char *(*)(char *, struct svc_req *)) magic_code_1_svc;
 		break;
 

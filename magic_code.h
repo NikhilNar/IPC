@@ -19,14 +19,14 @@ extern "C" {
 
 #if defined(__STDC__) || defined(__cplusplus)
 #define magic_code 1
-extern  int * magic_code_1(char **, CLIENT *);
-extern  int * magic_code_1_svc(char **, struct svc_req *);
+extern  void * magic_code_1(char **, CLIENT *);
+extern  void * magic_code_1_svc(char **, struct svc_req *);
 extern int magic_code_prog_1_freeresult (SVCXPRT *, xdrproc_t, caddr_t);
 
 #else /* K&R C */
 #define magic_code 1
-extern  int * magic_code_1();
-extern  int * magic_code_1_svc();
+extern  void * magic_code_1();
+extern  void * magic_code_1_svc();
 extern int magic_code_prog_1_freeresult ();
 #endif /* K&R C */
 

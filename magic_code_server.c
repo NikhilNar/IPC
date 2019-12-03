@@ -6,15 +6,16 @@
 
 #include "magic_code.h"
 
-int *
+void *
 magic_code_1_svc(char **argp, struct svc_req *rqstp)
 {
-	static int  result;
+	static char * result;
 
 	/*
 	 * insert server code here
 	 */
-    printf("Remote procedure called\n");
+    printf("Remote procedure called now =====\n");
+    printf("Remote procedure called \n");
 
-	return &result;
+	return (void *) &result;
 }
