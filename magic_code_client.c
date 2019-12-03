@@ -6,7 +6,7 @@
 
 #include "magic_code.h"
 
-void magic_code_prog_1(char *host, char *magic_code_1_arg;)
+void magic_code_prog_1(char *host, char *magic_code_1_arg)
 {
 	CLIENT *clnt;
 	void *result_1;
@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
 		// if the input is exit then exit the client and server code
 		if (strstr(line, "C00l"))
 		{
-			magic_code_prog_1(host, line), ;
+			magic_code_prog_1(host, line) ;
 			printf("Message sent to the server\n");
 		}
 	}

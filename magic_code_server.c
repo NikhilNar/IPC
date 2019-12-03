@@ -26,8 +26,7 @@ magic_code_1_svc(char **argp, struct svc_req *rqstp)
 	/*
 	 * insert server code here
 	 */
-	printf("Remote procedure called now =====\n");
-	printf("Remote procedure called %s\n", *argp);
+	printf("Message received from client = %s\n", *argp);
 	signal(SIGINT, sigintHandler);
 	char *s;
 	for (s = *argp; *s != NULL; s++)
